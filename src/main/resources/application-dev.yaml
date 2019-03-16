@@ -1,0 +1,35 @@
+logging:
+  level:
+    ROOT: DEBUG
+    com.antiplagiarism.fileuploadservice: DEBUG
+
+spring:
+  profiles:
+    active: dev
+
+  devtools:
+    restart:
+      enabled: true
+
+  jackson:
+    serialization:
+      indent-output: true
+
+eureka:
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    preferIpAddress: true
+
+elasticsearch:
+  clustername: docker-cluster
+  host: 172.20.0.1
+  port: 9300
+
+datamock:
+  count:
+    user: 1000
+    flat: 100
