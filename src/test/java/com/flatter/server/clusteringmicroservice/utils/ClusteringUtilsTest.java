@@ -21,6 +21,6 @@ public class ClusteringUtilsTest {
         questionnaireable.setConstructionYearMin(2000);
         questionnaireable.setConstructionYearMax(2019);
 
-        System.out.println(questionnaireable.calcSumOfWeights());
+        System.out.println(questionnaireable.getArrayOfPoints());
     }
 }

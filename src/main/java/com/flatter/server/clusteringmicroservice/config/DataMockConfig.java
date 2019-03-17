@@ -126,7 +126,7 @@ public class DataMockConfig {
         if (isInDevMode() && clusteringDocumentRepository.count()<1000 ) {
             log.debug("Current count is: "+clusteringDocumentRepository.count());
             log.debug("Application running in DEV profile starting init data in elastic");
-           // initDataInElastic();
+            initDataInElastic();
         }
     }
 
