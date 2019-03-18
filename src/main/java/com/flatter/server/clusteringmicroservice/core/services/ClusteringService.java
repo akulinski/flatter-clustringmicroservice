@@ -59,16 +59,15 @@ public class ClusteringService {
                     ex.printStackTrace();
                 }
             });
-            int count = toIntExact (clusteringDocumentRepository.count()*100);
+            int count = toIntExact(clusteringDocumentRepository.count() * 1000);
             KMeansPlusPlusClusterer<Questionnaireable> clusterer = new KMeansPlusPlusClusterer<>(clusteringDocumentRepository.countAllByQuestionnaireable_Name("offer"), count);
             List<CentroidCluster<Questionnaireable>> clusterResults = clusterer.cluster(questionnaireableLinkedList);
+
+            FileWriter out = new FileWriter("data/data" + new Date().toString() + ".csv");
 
             loginQuestionnaireableCache.invalidateAll();
             stringCentroidClusterCache.invalidateAll();
             questionnaireableCentroidClusterCache.invalidateAll();
-
-            FileWriter out = new FileWriter("data/data" + new Date().toString() + ".csv");
-
             try (CSVPrinter printer = new CSVPrinter(out, CSVFormat.DEFAULT.withHeader(ClusteringUtils.HEEADERS))) {
                 for (int i = 0; i < clusterResults.size(); i++) {
                     log.debug("Cluster " + i);
@@ -85,9 +84,7 @@ public class ClusteringService {
                     }
                 }
             }
-
             out.close();
-
             Thread.sleep(10000);
         }
     }
