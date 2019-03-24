@@ -1,7 +1,7 @@
 package com.flatter.server.clusteringmicroservice.utils;
 
-import com.flatter.server.clusteringmicroservice.core.domain.Questionnaireable;
-import com.flatter.server.clusteringmicroservice.core.domain.QuestionnaireableUser;
+import domain.Questionnaireable;
+import domain.QuestionnaireableUser;
 import org.junit.Test;
 
 public class ClusteringUtilsTest {

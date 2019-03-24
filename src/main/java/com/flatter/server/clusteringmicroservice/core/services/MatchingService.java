@@ -1,7 +1,7 @@
 package com.flatter.server.clusteringmicroservice.core.services;
 
-import com.flatter.server.clusteringmicroservice.core.domain.Questionnaireable;
 import com.google.common.cache.Cache;
+import domain.Questionnaireable;
 import org.apache.commons.math3.ml.clustering.CentroidCluster;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,35 +19,34 @@ public class MatchingService {
 
     private final Cache<String, Questionnaireable> loginQuestionnaireableCache;
 
-    private final Cache<String, CentroidCluster<Questionnaireable>> stringCentroidClusterCache;
 
     @Autowired
-    public MatchingService(Cache<Questionnaireable, CentroidCluster<Questionnaireable>> questionnaireableCentroidClusterCache, Cache<String, Questionnaireable> loginQuestionnaireableCache, Cache<String, CentroidCluster<Questionnaireable>> stringCentroidClusterCache) {
+    public MatchingService(Cache<Questionnaireable, CentroidCluster<Questionnaireable>> questionnaireableCentroidClusterCache, Cache<String, Questionnaireable> loginQuestionnaireableCache) {
         this.questionnaireableCentroidClusterCache = questionnaireableCentroidClusterCache;
         this.loginQuestionnaireableCache = loginQuestionnaireableCache;
-        this.stringCentroidClusterCache = stringCentroidClusterCache;
     }
 
 
-    public Stream<Map.Entry<Questionnaireable,Double>> getSortedMatches(String login){
+    public Stream<Map.Entry<Questionnaireable, Double>> getSortedMatches(String login) {
+
         Questionnaireable questionnaireable = loginQuestionnaireableCache.getIfPresent(login);
 
         CentroidCluster<Questionnaireable> questionnaireableCentroidCluster = questionnaireableCentroidClusterCache.getIfPresent(questionnaireable);
 
-        HashMap<Questionnaireable,Double> differnceBettwenPointAndCurrentUser = new HashMap<>();
+        HashMap<Questionnaireable, Double> differnceBettwenPointAndCurrentUser = new HashMap<>();
 
-        final List<Questionnaireable> flats = questionnaireableCentroidCluster.getPoints().stream().filter(questionnaireable1 -> questionnaireable1.getName().equals("offer")).collect(Collectors.toList());
+        final List<Questionnaireable> offers = questionnaireableCentroidCluster.getPoints().stream().filter(questionnaireable1 -> questionnaireable1.getName().equals("offer")).collect(Collectors.toList());
 
-        flats.forEach(flat->{
+        offers.forEach(offer -> {
             try {
-                differnceBettwenPointAndCurrentUser.put(flat,questionnaireable.getSumOfPoints()-flat.getSumOfPoints());
+                differnceBettwenPointAndCurrentUser.put(offer, questionnaireable.getSumOfPoints() - offer.getSumOfPoints());
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
         });
 
         return differnceBettwenPointAndCurrentUser.entrySet().stream()
-                        .sorted(Map.Entry.comparingByValue());
+                .sorted(Map.Entry.comparingByValue());
     }
 
 }

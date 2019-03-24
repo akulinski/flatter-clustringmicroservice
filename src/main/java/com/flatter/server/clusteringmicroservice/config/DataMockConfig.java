@@ -1,11 +1,10 @@
 package com.flatter.server.clusteringmicroservice.config;
 
-import com.flatter.server.clusteringmicroservice.core.domain.Questionnaireable;
-import com.flatter.server.clusteringmicroservice.core.domain.QuestionnaireableOffer;
-import com.flatter.server.clusteringmicroservice.core.domain.QuestionnaireableUser;
 import com.flatter.server.clusteringmicroservice.core.domain.documents.ClusteringDocument;
 import com.flatter.server.clusteringmicroservice.core.repositories.ClusteringDocumentRepository;
 import com.github.javafaker.Faker;
+import domain.QuestionnaireableOffer;
+import domain.QuestionnaireableUser;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

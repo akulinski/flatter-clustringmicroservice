@@ -1,8 +1,8 @@
 package com.flatter.server.clusteringmicroservice.core.Controllers;
 
-import com.flatter.server.clusteringmicroservice.core.domain.Questionnaireable;
 import com.flatter.server.clusteringmicroservice.core.services.MatchingService;
 import com.google.common.cache.Cache;
+import domain.Questionnaireable;
 import org.apache.commons.math3.ml.clustering.CentroidCluster;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

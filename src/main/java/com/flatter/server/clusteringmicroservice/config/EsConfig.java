@@ -12,6 +12,7 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 
 import java.net.InetAddress;
 
+
 @Configuration
 @EnableElasticsearchRepositories(basePackages = "com.flatter.server")
 public class EsConfig {

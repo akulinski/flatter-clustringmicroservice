@@ -1,8 +1,8 @@
 package com.flatter.server.clusteringmicroservice.config;
 
-import com.flatter.server.clusteringmicroservice.core.domain.Questionnaireable;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import domain.Questionnaireable;
 import org.apache.commons.math3.ml.clustering.CentroidCluster;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
