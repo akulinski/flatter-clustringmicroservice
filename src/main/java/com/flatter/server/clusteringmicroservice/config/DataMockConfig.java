@@ -1,11 +1,10 @@
 package com.flatter.server.clusteringmicroservice.config;
 
-import com.flatter.server.clusteringmicroservice.core.domain.Questionnaireable;
-import com.flatter.server.clusteringmicroservice.core.domain.QuestionnaireableOffer;
-import com.flatter.server.clusteringmicroservice.core.domain.QuestionnaireableUser;
 import com.flatter.server.clusteringmicroservice.core.domain.documents.ClusteringDocument;
 import com.flatter.server.clusteringmicroservice.core.repositories.ClusteringDocumentRepository;
 import com.github.javafaker.Faker;
+import domain.QuestionnaireableOffer;
+import domain.QuestionnaireableUser;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -56,7 +55,6 @@ public class DataMockConfig {
             ClusteringDocument clusteringDocument = new ClusteringDocument();
             QuestionnaireableOffer questionnaireableOffer = new QuestionnaireableOffer();
             setUpOffer(questionnaireableOffer);
-            setUpQuestionnaireable(questionnaireableOffer);
             clusteringDocument.setQuestionnaireable(questionnaireableOffer);
             clusteringDocumentRepository.save(clusteringDocument);
             log.debug("Adding document with offer: "+clusteringDocument.toString());
@@ -70,7 +68,6 @@ public class DataMockConfig {
             ClusteringDocument clusteringDocument = new ClusteringDocument();
             QuestionnaireableUser questionnaireableUser = new QuestionnaireableUser();
             setUpUser(questionnaireableUser);
-            setUpQuestionnaireable(questionnaireableUser);
             clusteringDocument.setQuestionnaireable(questionnaireableUser);
             clusteringDocumentRepository.save(clusteringDocument);
             log.debug("Adding document with user: "+clusteringDocument.toString());
@@ -78,6 +75,27 @@ public class DataMockConfig {
     }
 
     private void setUpUser(QuestionnaireableUser questionnaireableUser) {
+        questionnaireableUser.setConstructionYearMax(getCurrentYear());
+        questionnaireableUser.setConstructionYearMin(faker.number().numberBetween(1980, getCurrentYear()));
+        questionnaireableUser.setFurnished(faker.bool().bool());
+        questionnaireableUser.setPets(faker.bool().bool());
+        questionnaireableUser.setSmokingInside(faker.bool().bool());
+
+        int maxCost = faker.number().numberBetween(0, 10000);
+        int minCost = faker.number().numberBetween(0, maxCost);
+        questionnaireableUser.setTotalCostMax((double) maxCost);
+        questionnaireableUser.setTotalCostMin((double) minCost);
+
+        int maxRooms = faker.number().numberBetween(1, 10);
+        int minRooms = faker.number().numberBetween(1, maxRooms);
+        questionnaireableUser.setRoomAmountMax(maxRooms);
+        questionnaireableUser.setRoomAmountMin(minRooms);
+
+        int sizeMax = faker.number().numberBetween(15, 100);
+        int sizeMin = faker.number().numberBetween(15, sizeMax);
+        questionnaireableUser.setSizeMax((double) sizeMax);
+        questionnaireableUser.setSizeMin((double) sizeMin);
+
         questionnaireableUser.setEmail(faker.cat().name());
         questionnaireableUser.setFirstName(faker.funnyName().name());
         questionnaireableUser.setLogin(faker.lordOfTheRings().character());
@@ -86,31 +104,27 @@ public class DataMockConfig {
     }
 
     private void setUpOffer(QuestionnaireableOffer questionnaireableOffer){
+        int year = faker.number().numberBetween(1980, getCurrentYear());
+        questionnaireableOffer.setConstructionYearMax(year);
+        questionnaireableOffer.setConstructionYearMin(year);
+        questionnaireableOffer.setFurnished(faker.bool().bool());
+        questionnaireableOffer.setPets(faker.bool().bool());
+        questionnaireableOffer.setSmokingInside(faker.bool().bool());
+
+        int cost = faker.number().numberBetween(0, 10000);
+        questionnaireableOffer.setTotalCostMax((double) cost);
+        questionnaireableOffer.setTotalCostMin((double) cost);
+
+        int rooms = faker.number().numberBetween(1, 10);
+        questionnaireableOffer.setRoomAmountMax(rooms);
+        questionnaireableOffer.setRoomAmountMin(rooms);
+
+        int size = faker.number().numberBetween(15, 100);
+        questionnaireableOffer.setSizeMax((double) size);
+        questionnaireableOffer.setSizeMin((double) size);
+
         questionnaireableOffer.setDescription(faker.gameOfThrones().quote());
         questionnaireableOffer.setName("offer");
-    }
-
-    private void setUpQuestionnaireable(Questionnaireable questionnaireable) {
-        questionnaireable.setConstructionYearMax(getCurrentYear());
-        questionnaireable.setConstructionYearMin(faker.number().numberBetween(1980, getCurrentYear()));
-        questionnaireable.setFurnished(faker.bool().bool());
-        questionnaireable.setPets(faker.bool().bool());
-        questionnaireable.setSmokingInside(faker.bool().bool());
-
-        int maxCost = faker.number().numberBetween(0, 10000);
-        int minCost = faker.number().numberBetween(0, maxCost);
-        questionnaireable.setTotalCostMax((double) maxCost);
-        questionnaireable.setTotalCostMin((double) minCost);
-
-        int maxRooms = faker.number().numberBetween(1, 10);
-        int minRooms = faker.number().numberBetween(1, maxRooms);
-        questionnaireable.setRoomAmountMax(maxRooms);
-        questionnaireable.setRoomAmountMin(minRooms);
-
-        int sizeMax = faker.number().numberBetween(15, 100);
-        int sizeMin = faker.number().numberBetween(15, sizeMax);
-        questionnaireable.setSizeMin((double) sizeMax);
-        questionnaireable.setSizeMin((double) sizeMin);
     }
 
     private int getCurrentYear() {
@@ -126,7 +140,7 @@ public class DataMockConfig {
         if (isInDevMode() && clusteringDocumentRepository.count()<1000 ) {
             log.debug("Current count is: "+clusteringDocumentRepository.count());
             log.debug("Application running in DEV profile starting init data in elastic");
-           // initDataInElastic();
+            initDataInElastic();
         }
     }
 
